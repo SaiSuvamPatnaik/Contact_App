@@ -187,6 +187,7 @@ class _AddContactsState extends State<AddContacts> {
       "Name":nameadd,
       "Phone":number,
       "Title":typeselected,
+      "Balance":"10000",
     };
     ref.push().set(contact);
   }
