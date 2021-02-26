@@ -8,7 +8,7 @@ class history extends StatefulWidget {
 }
 
 class _historyState extends State<history> {
-  Query ref11;
+  Query ref;
 
   Widget buildcontactitems({Map<dynamic,dynamic> transactions}){
     return SingleChildScrollView(
@@ -16,9 +16,9 @@ class _historyState extends State<history> {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(5,10,25,0),
         child: Container(
-          height: 100,
           color: Colors.white,
-
+          height: 100,
+          constraints: BoxConstraints(maxWidth: 400),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,7 +48,9 @@ class _historyState extends State<history> {
                   Text(transactions["Time"],style: TextStyle(fontSize: 20,color: Colors.redAccent,fontWeight: FontWeight.w600),),
                   SizedBox(width: 20,),
                 ],
+
               ),
+              SizedBox(height: 10,),
 
             ],
           ),
@@ -60,7 +62,7 @@ class _historyState extends State<history> {
   void initState() {
     // TODO: implement initState
     super.initState();
-       ref11 = FirebaseDatabase.instance.reference().child("Transactions");
+       ref = FirebaseDatabase.instance.reference().child("Transactions");
   }
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,9 +73,9 @@ class _historyState extends State<history> {
       ),
       body: Container(
         height: double.infinity,
-        child: FirebaseAnimatedList(query: ref11 ,itemBuilder: (BuildContext context,
-            DataSnapshot snapshot1,Animation<double>animation,int index){
-          Map transactions = snapshot1.value;
+        child: FirebaseAnimatedList(query: ref ,itemBuilder: (BuildContext context,
+            DataSnapshot snapshot,Animation<double>animation,int index){
+          Map transactions = snapshot.value;
           return buildcontactitems(transactions: transactions);
         },),
       ),

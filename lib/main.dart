@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:thirty_days_flutter/Screen/Homepage.dart';
 import 'package:thirty_days_flutter/Screen/add_contacts.dart';
 import 'package:thirty_days_flutter/Screen/contacts.dart';
 
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
         accentColor: Colors.redAccent,
 
       ),
-      home: AddContacts(),
+      home: homepage(),
     );
   }
 }
