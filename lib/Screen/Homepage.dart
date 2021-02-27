@@ -13,14 +13,22 @@ class _homepageState extends State<homepage> {
   
   DatabaseReference ref;
   String Acc;
-  String balance;
+  String balance="";
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     ref = FirebaseDatabase.instance.reference().child("User").child("Sai Suvam");
+    getacc();
 
+  }
+  void getacc() async{
+    DataSnapshot Snapshot = await ref.once();
+    Map acc = Snapshot.value;
+    setState(() {
+      balance=acc["Balance"];
+    });
   }
 
   @override
@@ -51,124 +59,90 @@ class _homepageState extends State<homepage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(10,40,0,0),
-              child: Stack(
-                children: [
-                  Text("Welcome",style: TextStyle(fontSize: 65,fontWeight: FontWeight.bold,shadows: <Shadow>[
-                    Shadow(
-                      offset: Offset(1.0, 1.0),
-                      blurRadius: 3.0,
-                      color: Color.fromARGB(255,255, 0, 0),
-                    ),] ),),
-                  Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0,65,0,0),
-                        child: Text("Sai Suvam",style: TextStyle(fontSize: 65,fontWeight: FontWeight.bold,shadows: <Shadow>[
-                          Shadow(
-                            offset: Offset(1.0, 1.0),
-                            blurRadius: 3.0,
-                            color: Color.fromARGB(255,255, 0, 0),
-                          ),] ),),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(3,60,0,0),
-                        child: Text("...",style: TextStyle(fontSize: 70,fontWeight: FontWeight.bold,color: Colors.green ),),
-                      ),
+          Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10,30,0,0),
+                child: Text("Welcome",style: TextStyle(fontSize: 65,fontWeight: FontWeight.bold,shadows: <Shadow>[
+                  Shadow(
+                    offset: Offset(1.0, 1.0),
+                    blurRadius: 3.0,
+                    color: Color.fromARGB(255,255, 0, 0),
+                  ),] ),),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10,100,0,0),
+                child: Text("Sai Suvam",style: TextStyle(fontSize: 65,fontWeight: FontWeight.bold,shadows: <Shadow>[
+                  Shadow(
+                    offset: Offset(1.0, 1.0),
+                    blurRadius: 3.0,
+                    color: Color.fromARGB(255,255, 0, 0),
+                  ),
+                ]
+                ),),
+              ),
+            ],
+          ),
+          SizedBox(height: 60,),
+          Center(
+            child: Text("User Details",style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold,color: Colors.redAccent,
+                ),),
+          ),
+          SizedBox(height: 5,),
+          Center(
+            child: Container(
+              height: 235,
+              width: 370,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.black
+                ),
+                borderRadius: BorderRadius.all(Radius.circular(35.0)),
+                color: Color(0xFF002366),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
 
+                children: [
+
+                  Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.qr_code_scanner_outlined,color: Colors.white,size: 30,),
+                        SizedBox(width: 10,),
+                        Text("4580 9876 6521 3456",style: TextStyle(color: Colors.white,fontSize: 25),),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0,15,0,0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.person_add,color: Colors.white,size: 30,),
+                        SizedBox(width: 10,),
+                        Text("SAI SUVAM PATNAIK",style: TextStyle(color: Colors.white,fontSize: 25,fontWeight: FontWeight.bold),),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 5,),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+
+                    children: [
+                      Text("Your Balance :-",style: TextStyle(color: Colors.white,fontSize: 25),),
+                      SizedBox(width: 10,),
+
+                      Text("$balance",style: TextStyle(color: Colors.white,fontSize: 25),),
 
                     ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(75,200,0,0),
-                    child: Text("User Details",style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold,color: Colors.redAccent,
-                        ),),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(17,250,0,0),
-                    child: Container(
-                      height: 235,
-                      width: 340,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(35.0)),
-                        color: Color(0xFF002366),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-
-                          Row(
-                            children: [
-                              Container(
-                                child: Stack(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(20,60,0,0),
-                                      child: Icon(Icons.qr_code_scanner_outlined,color: Colors.white,size: 30,),
-                                    ),
-
-                                    Padding(
-                                        padding: const EdgeInsets.fromLTRB(60,60,0,0),
-                                        child: Text("4580 9876 6521 3456",style: TextStyle(color: Colors.white,fontSize: 25),)
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(60,10,0,0),
-                            child: Text("SAI SUVAM PATNAIK",style: TextStyle(color: Colors.white,fontSize: 25,fontWeight: FontWeight.bold),),
-                          ),
-                          Row(
-                            children: [
-                              Container(
-                                child: Stack(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(30,8,0,0),
-                                      child: Text("Your Balance :-",style: TextStyle(color: Colors.white,fontSize: 25),)
-                                    ),
-
-                                    Padding(
-                                        padding: const EdgeInsets.fromLTRB(200,10,0,0),
-                                        child: Text("$balance",style: TextStyle(color: Colors.white,fontSize: 25),)
-                                    ),
-                                    Padding(
-                                        padding: const EdgeInsets.fromLTRB(270,0,0,0),
-                                        child: IconButton(
-                                          icon: Icon(Icons.refresh,size: 30,color: Colors.white,),
-                                          color: Colors.black,
-                                          onPressed: ()async{
-                                            DataSnapshot Snapshot = await ref.once();
-                                            Map acc = Snapshot.value;
-                                            setState(() {
-                                              balance=acc["Balance"];
-                                            });
-                                          },
-                                        )
-                                    ),
-
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-
-                        ],
-                      ),
-
-                    ),
-                  ),
-
 
                 ],
               ),
+
             ),
           )
 
