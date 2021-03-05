@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:thirty_days_flutter/Screen/add_contacts.dart';
 import 'package:thirty_days_flutter/Screen/contacts.dart';
 import 'package:thirty_days_flutter/Screen/history.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class homepage extends StatefulWidget {
   @override
@@ -12,8 +13,9 @@ class homepage extends StatefulWidget {
 class _homepageState extends State<homepage> {
   
   DatabaseReference ref;
-  String Acc;
+  String Acc,name="";
   String balance="";
+  bool tapped=false;
 
   @override
   void initState() {
@@ -34,8 +36,9 @@ class _homepageState extends State<homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text("Hello User",style: TextStyle(fontSize: 25),),
+        title: Text("Welcome Sai Suvam",style: TextStyle(fontSize: 20),),
         actions: [
           Padding(
             padding: const EdgeInsets.fromLTRB(0,0,10,0),
@@ -43,7 +46,7 @@ class _homepageState extends State<homepage> {
               icon: Icon(
                 Icons.history,
                 color: Colors.white,
-                size: 30,
+                size: 25,
               ),
               onPressed: () {
                 Navigator.push(
@@ -56,98 +59,127 @@ class _homepageState extends State<homepage> {
         centerTitle: true,
 
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Stack(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10,30,0,0),
-                child: Text("Welcome",style: TextStyle(fontSize: 65,fontWeight: FontWeight.bold,shadows: <Shadow>[
-                  Shadow(
-                    offset: Offset(1.0, 1.0),
-                    blurRadius: 3.0,
-                    color: Color.fromARGB(255,255, 0, 0),
-                  ),] ),),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10,100,0,0),
-                child: Text("Sai Suvam",style: TextStyle(fontSize: 65,fontWeight: FontWeight.bold,shadows: <Shadow>[
-                  Shadow(
-                    offset: Offset(1.0, 1.0),
-                    blurRadius: 3.0,
-                    color: Color.fromARGB(255,255, 0, 0),
+      body: SingleChildScrollView(
+        child: Column(
+
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0,10,0,0),
+              child: Image.asset("Assets/Images/Hey.png"),
+            ),
+            SizedBox(height: 20,),
+            Center(
+              child: Text("User Details",style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold,color: Colors.redAccent,
+                  ),),
+            ),
+            SizedBox(height: 5,),
+            Center(
+              child: Container(
+                height: 235,
+                width: 370,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.black
                   ),
-                ]
-                ),),
-              ),
-            ],
-          ),
-          SizedBox(height: 60,),
-          Center(
-            child: Text("User Details",style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold,color: Colors.redAccent,
-                ),),
-          ),
-          SizedBox(height: 5,),
-          Center(
-            child: Container(
-              height: 235,
-              width: 370,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.black
+                  borderRadius: BorderRadius.all(Radius.circular(35.0)),
+                  color: Color(0xFF002366),
                 ),
-                borderRadius: BorderRadius.all(Radius.circular(35.0)),
-                color: Color(0xFF002366),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-
-                children: [
-
-                  Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.qr_code_scanner_outlined,color: Colors.white,size: 30,),
-                        SizedBox(width: 10,),
-                        Text("4580 9876 6521 3456",style: TextStyle(color: Colors.white,fontSize: 25),),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(0,15,0,0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.person_add,color: Colors.white,size: 30,),
-                        SizedBox(width: 10,),
-                        Text("SAI SUVAM PATNAIK",style: TextStyle(color: Colors.white,fontSize: 25,fontWeight: FontWeight.bold),),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 5,),
-
-                  Row(
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(0,25,0,0),
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
 
                     children: [
-                      Text("Your Balance :-",style: TextStyle(color: Colors.white,fontSize: 25),),
-                      SizedBox(width: 10,),
 
-                      Text("$balance",style: TextStyle(color: Colors.white,fontSize: 25),),
+                      Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.qr_code_scanner_outlined,color: Colors.white,size: 30,),
+                            SizedBox(width: 10,),
+                            Text("4580 9876 6521 3456",style: TextStyle(color: Colors.white,fontSize: 25),),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(0,15,0,0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.person_add,color: Colors.white,size: 30,),
+                            SizedBox(width: 10,),
+                            Text("SAI SUVAM PATNAIK",style: TextStyle(color: Colors.white,fontSize: 25,fontWeight: FontWeight.bold),),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 15,),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+
+                        children: [
+                          Icon(Icons.verified_user,color: Colors.white,size: 30,),
+                          SizedBox(width: 15,),
+                          Text("Your Balance :-",style: TextStyle(color: Colors.white,fontSize: 25),),
+                          SizedBox(width: 10,),
+
+                          Text("$balance",style: TextStyle(color: Colors.white,fontSize: 25),),
+
+                        ],
+                      ),
+                      SizedBox(height: 30,),
+
 
                     ],
                   ),
+                ),
 
-                ],
               ),
 
             ),
-          )
+            SizedBox(height: 10,),
+            Center(
+              child: InkWell(
+                onTap: ()async{
+                  setState(() {
+                    tapped=true;
+                    balance="10000";
+                  });
+                  Map<String,String> refill={
+                    "Balance":"10000",
+                  };
+                  ref.update(refill).then((value) => Fluttertoast.showToast(
+                      msg: "Refilled Amount Of Rs 10000",
+                      toastLength: Toast.LENGTH_LONG,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 3,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                      fontSize: 16.0
+                  ));
+                  await Future.delayed(Duration(milliseconds: 2000));
+                  setState(() {
+                    tapped=false;
+                  });
 
+                },
+                child: AnimatedContainer(
+                  duration: Duration(milliseconds: 500),
+                  height: 50,
+                  width: tapped? 50:95,
+                  decoration: BoxDecoration(
+                      color: Colors.redAccent,
+                      borderRadius: BorderRadius.circular(10)
+                  ),
+                  child: tapped
+                      ?Icon(Icons.done,color: Colors.white,)
+                      :Center(child: Text("REFILL",style: TextStyle(fontSize: 18,color: Colors.white),)),
+                ),
+              ),
+            )
 
-        ],
+          ]),
 
       ),
       floatingActionButton: FloatingActionButton(

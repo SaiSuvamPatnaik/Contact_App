@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/cupertino.dart';
@@ -5,10 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:thirty_days_flutter/Screen/Edit.dart';
 import 'package:thirty_days_flutter/Screen/Homepage.dart';
 
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:thirty_days_flutter/Screen/add_contacts.dart';
 import 'package:thirty_days_flutter/Screen/history.dart';
-import 'package:thirty_days_flutter/main.dart';
-
 class contacts extends StatefulWidget {
   @override
   _contactsState createState() => _contactsState();
@@ -17,17 +17,27 @@ class contacts extends StatefulWidget {
 class _contactsState extends State<contacts> {
 
   Query ref;
-  DatabaseReference ref1,ref2,ref3;
-  String addamount,balanceamount,newkey;
+  DatabaseReference ref1,ref2,ref3,ref4;
+  String addamount,balanceamount,newkey,balance;
   int newamount;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
     ref=FirebaseDatabase.instance.reference().child("Contact").orderByChild("Name");
     ref1 = FirebaseDatabase.instance.reference().child("Contact");
     ref2 = FirebaseDatabase.instance.reference().child("Transactions");
     ref3 = FirebaseDatabase.instance.reference().child("User").child("Sai Suvam");
+    getaccdetails();
+
+  }
+  void getaccdetails() async{
+    DataSnapshot Snapshot = await ref3.once();
+    Map acc = Snapshot.value;
+    setState(() {
+      balance=acc["Balance"];
+    });
   }
 
   Widget buildcontactitems({Map contact, int pos}){
@@ -119,22 +129,42 @@ class _contactsState extends State<contacts> {
                       ),
                       actions: [
                         FlatButton(onPressed: (){
-                          balanceamount = contact["Balance"];
-                          newamount=int.parse(balanceamount)+int.parse(addamount);
-                          DateTime now = new DateTime.now();
-                          Map<String,String> edited={
-                            "Balance":newamount.toString(),
-                          };
-                          Map<String,String> transaction={
-                            "Name":contact["Name"],
-                            "Amount":addamount,
-                            "Day":now.day.toString()+"-"+now.month.toString()+"-"+now.year.toString(),
-                            "Time":now.hour.toString()+":"+now.minute.toString()+":"+now.second.toString(),
-                          };
-                          ref1.child(contact["key"]).update(edited).then((value) => Navigator.pop(context));
-                          newkey = ref2.push().key;
-                          ref2.push().set(transaction);
-                          getacc(addamount);
+                          if(int.parse(balance)>=int.parse(addamount)) {
+                            balanceamount = contact["Balance"];
+                            newamount = int.parse(balanceamount) + int.parse(addamount);
+                            DateTime now = new DateTime.now();
+                            Map<String, String> edited = {
+                              "Balance": newamount.toString(),
+                            };
+                            Map<String, String> transaction = {
+                              "Name": contact["Name"],
+                              "Amount": addamount,
+                              "Day": now.day.toString() + "-" +
+                                  now.month.toString() + "-" +
+                                  now.year.toString(),
+                              "Time": now.hour.toString() + ":" +
+                                  now.minute.toString() + ":" +
+                                  now.second.toString(),
+                            };
+                            ref1.child(contact["key"]).update(edited).then((
+                                value) => Navigator.pop(context));
+                            newkey = ref2
+                                .push()
+                                .key;
+                            ref2.push().set(transaction);
+                            getacc(addamount);
+                          }
+                          else{
+                            Fluttertoast.showToast(
+                                msg: "Insufficient Balance !! Refill Your Account",
+                                toastLength: Toast.LENGTH_LONG,
+                                gravity: ToastGravity.CENTER,
+                                timeInSecForIosWeb: 3,
+                                backgroundColor: Colors.red,
+                                textColor: Colors.white,
+                                fontSize: 16.0
+                            );
+                          }
 
                         },
                           child: Text("OK",style: TextStyle(fontSize: 15,fontWeight: FontWeight.w700),),),
