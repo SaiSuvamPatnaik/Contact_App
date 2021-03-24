@@ -50,10 +50,10 @@ class _splashState extends State<splash> {
                       child: Text("CONTACT APP",style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold),),
                     ),
                   ),
-                  
-
-
-      ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0,280,0,0),
+                    child: const SpinKitWave(color: Colors.black, type: SpinKitWaveType.start),
+                  ),
                 ],
               )
 
