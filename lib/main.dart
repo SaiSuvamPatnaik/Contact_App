@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:thirty_days_flutter/Screen/Homepage.dart';
 import 'package:thirty_days_flutter/Screen/add_contacts.dart';
 import 'package:thirty_days_flutter/Screen/contacts.dart';
+import 'package:thirty_days_flutter/Screen/splash.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
         accentColor: Colors.redAccent,
 
       ),
-      home: homepage(),
+      home: splash(),
     );
   }
 }
