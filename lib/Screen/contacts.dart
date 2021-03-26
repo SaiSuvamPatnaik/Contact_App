@@ -200,7 +200,7 @@ class _contactsState extends State<contacts> {
         centerTitle: true,
         leading: IconButton(
           icon: Icon(
-            Icons.backspace,
+            Icons.chevron_left,
             color: Colors.white,
           ),
           onPressed: () {

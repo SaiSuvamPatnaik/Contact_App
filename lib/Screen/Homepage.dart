@@ -1,17 +1,33 @@
+import 'dart:async';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:thirty_days_flutter/Screen/add_contacts.dart';
 import 'package:thirty_days_flutter/Screen/contacts.dart';
 import 'package:thirty_days_flutter/Screen/history.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import 'Login.dart';
+
 class homepage extends StatefulWidget {
+  String username;
+  homepage({
+    this.username
+  });
+
   @override
-  _homepageState createState() => _homepageState();
+  _homepageState createState() => _homepageState(username:username);
 }
 
 class _homepageState extends State<homepage> {
-  
+
+  String username;
+  _homepageState({
+    this.username
+  });
+  GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
+  bool _isLoggedIn = true;
   DatabaseReference ref;
   String Acc,name="";
   String balance="";
@@ -38,7 +54,22 @@ class _homepageState extends State<homepage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text("Welcome Sai Suvam",style: TextStyle(fontSize: 20),),
+        title: Text("Welcome $username",style: TextStyle(fontSize: 20),),
+        leading: IconButton(
+          icon: Icon(
+            Icons.chevron_left,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            _googleSignIn.signOut();
+            setState(() {
+              _isLoggedIn = false;
+            });
+            Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => sign()));
+          },
+        ),
         actions: [
           Padding(
             padding: const EdgeInsets.fromLTRB(0,0,10,0),
@@ -51,12 +82,12 @@ class _homepageState extends State<homepage> {
               onPressed: () {
                 Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => contacts()));
+                    MaterialPageRoute(builder: (context) => history()));
               },
             ),
           )
         ],
-        centerTitle: true,
+
 
       ),
       body: SingleChildScrollView(
