@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:thirty_days_flutter/Screen/Edit.dart';
 import 'package:thirty_days_flutter/Screen/add_contacts.dart';
 import 'package:thirty_days_flutter/Screen/contacts.dart';
 import 'package:thirty_days_flutter/Screen/history.dart';
@@ -11,33 +12,36 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'Login.dart';
 
 class homepage extends StatefulWidget {
-  String username;
+  String username,url,mail;
   homepage({
-    this.username
+    this.username,
+    this.url,
+    this.mail
   });
 
   @override
-  _homepageState createState() => _homepageState(username:username);
+  _homepageState createState() => _homepageState(username:username,url:url,mail:mail);
 }
 
 class _homepageState extends State<homepage> {
-
-  String username;
+  String username,url,mail;
   _homepageState({
-    this.username
+    this.username,
+    this.url,
+    this.mail
   });
   GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
   bool _isLoggedIn = true;
   DatabaseReference ref;
   String Acc,name="";
   String balance="";
+  String url1;
   bool tapped=false;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
     ref = FirebaseDatabase.instance.reference().child("User").child(username);
     getacc();
     Timer(Duration(seconds: 1),()=>
@@ -70,21 +74,7 @@ class _homepageState extends State<homepage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text("Welcome $username",style: TextStyle(fontSize: 20),),
-        leading: IconButton(
-          icon: Icon(
-            Icons.chevron_left,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            _googleSignIn.signOut();
-            setState(() {
-              _isLoggedIn = false;
-            });
-            Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => sign()));
-          },
-        ),
+
         actions: [
           Padding(
             padding: const EdgeInsets.fromLTRB(0,0,10,0),
@@ -102,9 +92,42 @@ class _homepageState extends State<homepage> {
             ),
           )
         ],
-
-
       ),
+      drawer: Drawer(
+          child: ListView(
+            children: <Widget>[
+              ListTile(
+                leading: CircleAvatar(backgroundImage:  NetworkImage("$url")),
+                title: Text("$username"),
+                subtitle: Text("$mail"),
+              ),
+              ListTile(leading: Icon(Icons.home), title: Text("Home"),onTap: (){Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => homepage(username:username,url:url,mail:mail)));},),
+              ListTile(leading: Icon(Icons.grid_on), title: Text("Add Contact"),onTap: (){Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AddContacts(username:username,url:url,mail:mail)));}),
+              ListTile(leading: Icon(Icons.contacts), title: Text("Check Contact"),onTap: (){Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => contacts(username:username)));}),
+              ListTile(leading: Icon(Icons.edit), title: Text("Edit Contact"),onTap: (){Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Edit(username:username,url:url,mail:mail)));}),
+              ListTile(leading: Icon(Icons.history), title: Text("Transaction History"),onTap: (){Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => history(username:username,url:url,mail:mail)));}),
+              ListTile(leading: Icon(Icons.logout),
+                  title: Text("Log Out"),onTap: (){
+                    _googleSignIn.signOut();
+                  setState(() {
+                    _isLoggedIn = false;
+                  });
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => sign()));
+              }),
+            ],
+          )),
       body: SingleChildScrollView(
         child: Column(
 
@@ -233,7 +256,7 @@ class _homepageState extends State<homepage> {
         onPressed: (){
           Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AddContacts(username:username)));
+              MaterialPageRoute(builder: (context) => AddContacts(username:username,url:url,mail:mail)));
         },
         child: Icon(Icons.add,color: Colors.white,size: 20,),
 

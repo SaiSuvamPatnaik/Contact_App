@@ -4,20 +4,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:thirty_days_flutter/Screen/contacts.dart';
 
+import 'Homepage.dart';
+
 class AddContacts extends StatefulWidget {
-  String username;
+  String username,url,mail;
   AddContacts({
-    this.username
+    this.username,
+    this.url,
+    this.mail
   });
   @override
-  _AddContactsState createState() => _AddContactsState(username:username);
+  _AddContactsState createState() => _AddContactsState(username:username,url:url,mail:mail);
 }
 
 class _AddContactsState extends State<AddContacts> {
 
-  String username;
+  String username,url,mail;
   _AddContactsState({
-    this.username
+    this.username,
+    this.url,
+    this.mail
   });
   TextEditingController numbercontroller;
   String typeselected,nameadd;
@@ -33,7 +39,6 @@ class _AddContactsState extends State<AddContacts> {
 
   Widget ButtonType(String title){
     return InkWell(
-
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20,0,0,0),
         child: RaisedButton(
@@ -63,6 +68,17 @@ class _AddContactsState extends State<AddContacts> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(
+            Icons.chevron_left,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => homepage(username:username,url:url,mail:mail)));
+          },
+        ),
         title: Text("Add Contact"),
         centerTitle: true,
       ),
@@ -172,7 +188,7 @@ class _AddContactsState extends State<AddContacts> {
                       onPressed: (){
                         Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => contacts(username:username)));
+                            MaterialPageRoute(builder: (context) => contacts(username:username,url:url,mail:mail)));
                       },
                       child: Text("Check Contact",style: TextStyle(color: Colors.white,fontSize: 18),),
                     ),

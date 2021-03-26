@@ -2,21 +2,30 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 
+import 'Homepage.dart';
+
 class history extends StatefulWidget {
-  String username;
+  String username,url,mail;
   history({
-    this.username
+    this.username,
+    this.url,
+    this.mail
 });
   @override
-  _historyState createState() => _historyState(username:username);
+  _historyState createState() => _historyState(username:username,url:url,mail:mail);
 }
 
 class _historyState extends State<history> {
+
   Query ref;
-  String username;
+  String username,mail,url;
+
   _historyState({
-    this.username
+    this.username,
+    this.url,
+    this.mail
   });
+
   @override
   void initState() {
     // TODO: implement initState
@@ -76,6 +85,17 @@ class _historyState extends State<history> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(
+            Icons.chevron_left,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => homepage(username:username,url:url,mail:mail)));
+          },
+        ),
         title: Text("History"),
         centerTitle: true,
 

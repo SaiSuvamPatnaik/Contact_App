@@ -14,7 +14,7 @@ class _signState extends State<sign> {
   @override
 
   bool _isLoggedIn = false;
-  String username;
+  String username,url,mail;
   GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
 
   _login() async{
@@ -23,10 +23,12 @@ class _signState extends State<sign> {
       setState(() {
         _isLoggedIn = true;
         username = _googleSignIn.currentUser.displayName;
+        url = _googleSignIn.currentUser.photoUrl;
+        mail = _googleSignIn.currentUser.email;
       });
       Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => homepage(username: username,)));
+          MaterialPageRoute(builder: (context) => homepage(username: username,url: url,mail:mail)));
     } catch (err){
       print(err);
     }

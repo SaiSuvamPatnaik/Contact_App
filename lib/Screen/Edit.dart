@@ -7,19 +7,23 @@ import 'package:flutter/cupertino.dart';
 
 class Edit extends StatefulWidget {
 
-  String contactkey,username;
+  String contactkey,username,url,mail;
   Edit({
     this.contactkey,
-    this.username
+    this.username,
+    this.url,
+    this.mail
 });
   @override
-  _EditState createState() => _EditState(username:username);
+  _EditState createState() => _EditState(username:username,url:url,mail:mail);
 }
 
 class _EditState extends State<Edit> {
-  String username;
+  String username,url,mail;
   _EditState({
-    this.username
+    this.username,
+    this.url,
+    this.mail
   });
   TextEditingController namecontroller,numbercontroller;
   String typeselected;
@@ -176,7 +180,7 @@ class _EditState extends State<Edit> {
                       onPressed: (){
                         Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => contacts()));
+                            MaterialPageRoute(builder: (context) => contacts(username: username,url:url,mail:mail,)));
                       },
                       child: Text("Check Contact",style: TextStyle(color: Colors.white,fontSize: 18),),
                     ),

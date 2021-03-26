@@ -10,18 +10,22 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:thirty_days_flutter/Screen/add_contacts.dart';
 import 'package:thirty_days_flutter/Screen/history.dart';
 class contacts extends StatefulWidget {
-  String username;
+  String username,url,mail;
   contacts({
-    this.username
+    this.username,
+    this.url,
+    this.mail
   });
   @override
-  _contactsState createState() => _contactsState(username:username);
+  _contactsState createState() => _contactsState(username:username,url:url,mail:mail);
 }
 
 class _contactsState extends State<contacts> {
-  String username;
+  String username,url,mail;
   _contactsState({
-    this.username
+    this.username,
+    this.url,
+    this.mail
   });
   Query ref;
   DatabaseReference ref1,ref2,ref3,ref4;
@@ -98,7 +102,7 @@ class _contactsState extends State<contacts> {
                 RaisedButton.icon(onPressed: (){
                   Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Edit(contactkey: contact["key"],username:username)));
+                      MaterialPageRoute(builder: (context) => Edit(contactkey: contact["key"],username:username,url:url,mail:mail)));
                 },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
@@ -155,9 +159,7 @@ class _contactsState extends State<contacts> {
                             };
                             ref1.child(contact["key"]).update(edited).then((
                                 value) => Navigator.pop(context));
-                            newkey = ref2
-                                .push()
-                                .key;
+                            newkey = ref2.push().key;
                             ref2.push().set(transaction);
                             getacc(addamount);
                           }
@@ -213,7 +215,7 @@ class _contactsState extends State<contacts> {
           onPressed: () {
             Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => homepage(username:username)));
+                MaterialPageRoute(builder: (context) => homepage(username:username,url:url,mail:mail)));
           },
         ),
         actions: <Widget>[
@@ -225,7 +227,7 @@ class _contactsState extends State<contacts> {
             onPressed: () {
               Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => history(username:username)));
+                  MaterialPageRoute(builder: (context) => history(username:username,url:url,mail:mail)));
             },
           )
         ],
@@ -244,7 +246,7 @@ class _contactsState extends State<contacts> {
         onPressed: (){
           Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AddContacts()));
+              MaterialPageRoute(builder: (context) => AddContacts(username: username,url: url,mail:mail,)));
         },
         child: Icon(Icons.add,color: Colors.white,size: 20,),
 
