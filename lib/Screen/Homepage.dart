@@ -37,9 +37,24 @@ class _homepageState extends State<homepage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    ref = FirebaseDatabase.instance.reference().child("User").child("Sai Suvam");
-    getacc();
 
+    ref = FirebaseDatabase.instance.reference().child("User").child(username);
+    getacc();
+    Timer(Duration(seconds: 1),()=>
+        showToast());
+  }
+  showToast(){
+    if(balance=="") {
+      Fluttertoast.showToast(
+          msg: "$username, Click on refill to add amount to your wallet",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 3,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+    }
   }
   void getacc() async{
     DataSnapshot Snapshot = await ref.once();
@@ -82,7 +97,7 @@ class _homepageState extends State<homepage> {
               onPressed: () {
                 Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => history()));
+                    MaterialPageRoute(builder: (context) => history(username:username)));
               },
             ),
           )
@@ -140,7 +155,7 @@ class _homepageState extends State<homepage> {
                           children: [
                             Icon(Icons.person_add,color: Colors.white,size: 30,),
                             SizedBox(width: 10,),
-                            Text("SAI SUVAM PATNAIK",style: TextStyle(color: Colors.white,fontSize: 25,fontWeight: FontWeight.bold),),
+                            Text("$username",style: TextStyle(color: Colors.white,fontSize: 25,fontWeight: FontWeight.bold),),
                           ],
                         ),
                       ),
@@ -218,7 +233,7 @@ class _homepageState extends State<homepage> {
         onPressed: (){
           Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AddContacts()));
+              MaterialPageRoute(builder: (context) => AddContacts(username:username)));
         },
         child: Icon(Icons.add,color: Colors.white,size: 20,),
 

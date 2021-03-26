@@ -10,12 +10,19 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:thirty_days_flutter/Screen/add_contacts.dart';
 import 'package:thirty_days_flutter/Screen/history.dart';
 class contacts extends StatefulWidget {
+  String username;
+  contacts({
+    this.username
+  });
   @override
-  _contactsState createState() => _contactsState();
+  _contactsState createState() => _contactsState(username:username);
 }
 
 class _contactsState extends State<contacts> {
-
+  String username;
+  _contactsState({
+    this.username
+  });
   Query ref;
   DatabaseReference ref1,ref2,ref3,ref4;
   String addamount,balanceamount,newkey,balance;
@@ -25,10 +32,10 @@ class _contactsState extends State<contacts> {
     // TODO: implement initState
     super.initState();
 
-    ref=FirebaseDatabase.instance.reference().child("Contact").orderByChild("Name");
-    ref1 = FirebaseDatabase.instance.reference().child("Contact");
-    ref2 = FirebaseDatabase.instance.reference().child("Transactions");
-    ref3 = FirebaseDatabase.instance.reference().child("User").child("Sai Suvam");
+    ref=FirebaseDatabase.instance.reference().child("Contact").child(username).orderByChild("Name");
+    ref1 = FirebaseDatabase.instance.reference().child("Contact").child(username);
+    ref2 = FirebaseDatabase.instance.reference().child("Transactions").child(username);
+    ref3 = FirebaseDatabase.instance.reference().child("User").child(username);
     getaccdetails();
 
   }
@@ -91,7 +98,7 @@ class _contactsState extends State<contacts> {
                 RaisedButton.icon(onPressed: (){
                   Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Edit(contactkey: contact["key"],)));
+                      MaterialPageRoute(builder: (context) => Edit(contactkey: contact["key"],username:username)));
                 },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
@@ -206,7 +213,7 @@ class _contactsState extends State<contacts> {
           onPressed: () {
             Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => homepage()));
+                MaterialPageRoute(builder: (context) => homepage(username:username)));
           },
         ),
         actions: <Widget>[
@@ -218,7 +225,7 @@ class _contactsState extends State<contacts> {
             onPressed: () {
               Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => history()));
+                  MaterialPageRoute(builder: (context) => history(username:username)));
             },
           )
         ],

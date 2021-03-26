@@ -7,15 +7,20 @@ import 'package:flutter/cupertino.dart';
 
 class Edit extends StatefulWidget {
 
-  String contactkey;
+  String contactkey,username;
   Edit({
-    this.contactkey
+    this.contactkey,
+    this.username
 });
   @override
-  _EditState createState() => _EditState();
+  _EditState createState() => _EditState(username:username);
 }
 
 class _EditState extends State<Edit> {
+  String username;
+  _EditState({
+    this.username
+  });
   TextEditingController namecontroller,numbercontroller;
   String typeselected;
 
@@ -53,7 +58,7 @@ class _EditState extends State<Edit> {
     super.initState();
     namecontroller=TextEditingController();
     numbercontroller=TextEditingController();
-    ref = FirebaseDatabase.instance.reference().child("Contact");
+    ref = FirebaseDatabase.instance.reference().child(username).child("Contact");
     getcontact();
   }
 

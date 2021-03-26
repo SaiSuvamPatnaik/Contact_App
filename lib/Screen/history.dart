@@ -3,12 +3,26 @@ import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 
 class history extends StatefulWidget {
+  String username;
+  history({
+    this.username
+});
   @override
-  _historyState createState() => _historyState();
+  _historyState createState() => _historyState(username:username);
 }
 
 class _historyState extends State<history> {
   Query ref;
+  String username;
+  _historyState({
+    this.username
+  });
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    ref = FirebaseDatabase.instance.reference().child("Transactions").child(username);
+  }
 
   Widget buildcontactitems({Map<dynamic,dynamic> transactions}){
     return SingleChildScrollView(
@@ -58,12 +72,7 @@ class _historyState extends State<history> {
       ),
     );
   }
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-       ref = FirebaseDatabase.instance.reference().child("Transactions");
-  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

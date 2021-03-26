@@ -5,14 +5,31 @@ import 'package:flutter/widgets.dart';
 import 'package:thirty_days_flutter/Screen/contacts.dart';
 
 class AddContacts extends StatefulWidget {
+  String username;
+  AddContacts({
+    this.username
+  });
   @override
-  _AddContactsState createState() => _AddContactsState();
+  _AddContactsState createState() => _AddContactsState(username:username);
 }
 
 class _AddContactsState extends State<AddContacts> {
 
+  String username;
+  _AddContactsState({
+    this.username
+  });
   TextEditingController numbercontroller;
   String typeselected,nameadd;
+  DatabaseReference ref;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    numbercontroller=TextEditingController();
+    ref = FirebaseDatabase.instance.reference().child("Contact").child(username);
+  }
 
   Widget ButtonType(String title){
     return InkWell(
@@ -40,18 +57,6 @@ class _AddContactsState extends State<AddContacts> {
 
     );
   }
-
-  DatabaseReference ref;
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    numbercontroller=TextEditingController();
-    ref = FirebaseDatabase.instance.reference().child("Contact");
-  }
-
-
-
 
 
   @override
@@ -167,7 +172,7 @@ class _AddContactsState extends State<AddContacts> {
                       onPressed: (){
                         Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => contacts()));
+                            MaterialPageRoute(builder: (context) => contacts(username:username)));
                       },
                       child: Text("Check Contact",style: TextStyle(color: Colors.white,fontSize: 18),),
                     ),
