@@ -96,6 +96,7 @@ class _historyState extends State<history> {
                 MaterialPageRoute(builder: (context) => homepage(username:username,url:url,mail:mail)));
           },
         ),
+        
         title: Text("History"),
         centerTitle: true,
 
