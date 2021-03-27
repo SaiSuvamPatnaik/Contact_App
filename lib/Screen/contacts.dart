@@ -237,8 +237,6 @@ class _contactsState extends State<contacts> {
                               userskey=contact["key"];
                             });
                             ref10.set(transaction);
-                            //ref2.push().set(transaction);
-
                             getacc(addamount);
                           }
                           else{
