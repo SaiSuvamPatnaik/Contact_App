@@ -53,7 +53,7 @@ class _contactsState extends State<contacts> {
   }
   void paysucess(PaymentSuccessResponse response){
     Fluttertoast.showToast(
-        msg: "Rs-$addamount Sucessfully transfered",
+        msg: "Rs $addamount Sucessfully transfered",
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 3,
@@ -64,9 +64,6 @@ class _contactsState extends State<contacts> {
   }
 
   void payfailure(PaymentFailureResponse response){
-    print("----------------------------------------");
-    print("SSPPPP");
-    print("$userskey");
     ref2.child("$deletekey").remove();
     updatemine();
     updateusers();
