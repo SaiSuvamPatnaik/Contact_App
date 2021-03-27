@@ -67,6 +67,15 @@ class _contactsState extends State<contacts> {
     ref2.child("$deletekey").remove();
     updatemine();
     updateusers();
+    Fluttertoast.showToast(
+        msg: "Payment Of Rs $addamount Failed...Try Again Later",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 3,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0
+    );
   }
   updatemine() async{
     DataSnapshot Snapshot = await ref3.once();
