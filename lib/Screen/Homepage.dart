@@ -104,7 +104,7 @@ class _homepageState extends State<homepage> {
               ListTile(leading: Icon(Icons.home), title: Text("Home"),onTap: (){Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => homepage(username:username,url:url,mail:mail)));},),
-              ListTile(leading: Icon(Icons.grid_on), title: Text("Add Contact"),onTap: (){Navigator.push(
+              ListTile(leading: Icon(Icons.contact_phone), title: Text("Add Contact"),onTap: (){Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => AddContacts(username:username,url:url,mail:mail)));}),
               ListTile(leading: Icon(Icons.contacts), title: Text("Check Contact"),onTap: (){Navigator.push(

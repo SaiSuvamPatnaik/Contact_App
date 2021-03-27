@@ -5,10 +5,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:thirty_days_flutter/Screen/Edit.dart';
 import 'package:thirty_days_flutter/Screen/Homepage.dart';
-
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:thirty_days_flutter/Screen/add_contacts.dart';
 import 'package:thirty_days_flutter/Screen/history.dart';
+
+//
+
 class contacts extends StatefulWidget {
   String username,url,mail;
   contacts({
@@ -21,7 +24,8 @@ class contacts extends StatefulWidget {
 }
 
 class _contactsState extends State<contacts> {
-  String username,url,mail;
+  final razorpay = Razorpay();
+  String username,url,mail,minebalance,userbalance,userskey;
   _contactsState({
     this.username,
     this.url,
@@ -31,11 +35,15 @@ class _contactsState extends State<contacts> {
   DatabaseReference ref1,ref2,ref3,ref4;
   String addamount,balanceamount,newkey,balance;
   int newamount;
+  String deletekey;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
+    razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS,paysucess);
+    razorpay.on(Razorpay.EVENT_PAYMENT_ERROR,payfailure);
+    razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET,payexternal);
     ref=FirebaseDatabase.instance.reference().child("Contact").child(username).orderByChild("Name");
     ref1 = FirebaseDatabase.instance.reference().child("Contact").child(username);
     ref2 = FirebaseDatabase.instance.reference().child("Transactions").child(username);
@@ -43,7 +51,52 @@ class _contactsState extends State<contacts> {
     getaccdetails();
 
   }
+  void paysucess(PaymentSuccessResponse response){
+
+  }
+  void payfailure(PaymentFailureResponse response){
+    print("----------------------------------------");
+    print("SSPPPP");
+    print("$userskey");
+    ref2.child("$deletekey").remove();
+    updatemine();
+    updateusers();
+  }
+  updatemine() async{
+    DataSnapshot Snapshot = await ref3.once();
+    Map mine = Snapshot.value;
+    minebalance=mine["Balance"];
+    int updation1=int.parse(minebalance)+int.parse(addamount);
+    Map<String,String> change1={
+      "Balance":updation1.toString()
+    };
+    ref3.update(change1);
+  }
+  updateusers() async{
+    DataSnapshot Snapshot = await ref1.child("$userskey").once();
+    Map users = Snapshot.value;
+    userbalance=users["Balance"];
+    int updation=int.parse(userbalance)-int.parse(addamount);
+    Map<String,String> change={
+      "Balance":updation.toString()
+    };
+    ref1.child("$userskey").update(change);
+  }
+  void payexternal(ExternalWalletResponse response){
+
+  }
+
+  void getpayment(String addamount){
+    var option = {
+      'key':'rzp_test_YihQ2nqrabwrFH',
+      'amount': int.parse(addamount)*100,
+      'name':'SAI SUVAM',
+      'prefill':{'contact':'6370001439','email':'lipun3434@gmail.com'}
+    };
+    razorpay.open(option);
+  }
   void getaccdetails() async{
+
     DataSnapshot Snapshot = await ref3.once();
     Map acc = Snapshot.value;
     setState(() {
@@ -134,12 +187,15 @@ class _contactsState extends State<contacts> {
                             prefixIcon: Icon(Icons.money_outlined,size: 25,)
                         ),
                         onChanged: (text){
-                          addamount=text;
+                          setState(() {
+                            addamount=text;
+                          });
                         },
                         style: TextStyle(fontSize: 25,color: Colors.black),
                       ),
                       actions: [
                         FlatButton(onPressed: (){
+                          getpayment(addamount);
                           if(int.parse(balance)>=int.parse(addamount)) {
                             balanceamount = contact["Balance"];
                             newamount = int.parse(balanceamount) + int.parse(addamount);
@@ -159,8 +215,15 @@ class _contactsState extends State<contacts> {
                             };
                             ref1.child(contact["key"]).update(edited).then((
                                 value) => Navigator.pop(context));
-                            newkey = ref2.push().key;
-                            ref2.push().set(transaction);
+
+                            DatabaseReference ref10 = ref2.push();
+                            setState(() {
+                              deletekey=ref10.key;
+                              userskey=contact["key"];
+                            });
+                            ref10.set(transaction);
+                            //ref2.push().set(transaction);
+
                             getacc(addamount);
                           }
                           else{
@@ -239,6 +302,7 @@ class _contactsState extends State<contacts> {
             DataSnapshot snapshot,Animation<double>animation,int index){
           Map contact = snapshot.value;
           contact["key"] = snapshot.key;
+
           return buildcontactitems(contact: contact,pos: index);
         },),
       ),
@@ -263,24 +327,20 @@ class _contactsState extends State<contacts> {
     };
     ref3.update(acct);
   }
-  Color gettypecolor(String type){
-    Color color = new Color(1);                //Creating Object of the class Color
 
+  Color gettypecolor(String type)
+  {
+    Color color = new Color(1);                //Creating Object of the class Color
     if(type=="Work")
       color=Colors.brown;
-
     if(type=="Official")
       color=Colors.orange;
-
     if(type=="Friends")
       color=Colors.teal;
-
     if(type=="Family")
       color=Colors.cyan;
-
     if(type=="Other")
       color=Colors.green;
-
     return color;
   }
 }
