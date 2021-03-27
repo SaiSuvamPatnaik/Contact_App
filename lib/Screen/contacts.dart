@@ -52,8 +52,17 @@ class _contactsState extends State<contacts> {
 
   }
   void paysucess(PaymentSuccessResponse response){
-
+    Fluttertoast.showToast(
+        msg: "Rs-$addamount Sucessfully transfered",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 3,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0
+    );
   }
+
   void payfailure(PaymentFailureResponse response){
     print("----------------------------------------");
     print("SSPPPP");
