@@ -81,32 +81,36 @@ class _historyState extends State<history> {
                         height: 90,
                         child: ListTile(
                           leading: Padding(
-                            padding: const EdgeInsets.fromLTRB(0,8,0,0),
+                            padding: const EdgeInsets.fromLTRB(0,16,0,0),
                             child: CircleAvatar(
                               radius: 20,
-                              child: Icon(Icons.person,size: 20,),
+                              backgroundColor: Colors.black,
+                              child: Icon(Icons.person,size: 20,color: Colors.white,),
                             ),
                           ),
                           title: Padding(
-                            padding: const EdgeInsets.fromLTRB(0,20,0,0),
-                            child: Text(item[index]["Name"],style: TextStyle(fontSize: 18,color: Colors.black),),
+                            padding: const EdgeInsets.fromLTRB(0,17,0,0),
+                            child: Text(item[index]["Name"],style: TextStyle(fontSize: 18,color: Colors.redAccent,fontWeight: FontWeight.bold),),
                           ),
                           subtitle: Padding(
                             padding: const EdgeInsets.fromLTRB(0,5,0,0),
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Icon(Icons.date_range,size: 20,),
-                                Text(item[index]["Day"]),
+                                Icon(Icons.date_range,size: 18,),
+                                SizedBox(width: 3,),
+                                Text(item[index]["Day"],style: TextStyle(color: Colors.black,fontSize: 15)),
                                 SizedBox(width: 10,),
-                                Icon(Icons.lock_clock,size: 20,),
-                                Text(item[index]["Time"]),
+                                Icon(Icons.lock_clock,size: 18,),
+                                SizedBox(width: 3,),
+                                Text(item[index]["Time"],style: TextStyle(color: Colors.black,fontSize: 15)),
 
                               ],
                             ),
                           ),
                           trailing: Padding(
-                            padding: const EdgeInsets.fromLTRB(0,20,10,0),
-                            child: Text(item[index]["Amount"],style: TextStyle(fontSize: 19,color: Colors.black),),
+                            padding: const EdgeInsets.fromLTRB(0,17,10,0),
+                            child: Text(item[index]["Amount"],style: TextStyle(fontSize: 19,color: Colors.black,fontWeight: FontWeight.bold),),
                           ),
 
 
