@@ -31,55 +31,7 @@ class _historyState extends State<history> {
     // TODO: implement initState
     super.initState();
     ref = FirebaseDatabase.instance.reference().child("Transactions").child(username);
-  }
 
-  Widget buildcontactitems({Map<dynamic,dynamic> transactions}){
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(5,10,25,0),
-        child: Container(
-          color: Colors.white,
-          height: 100,
-          constraints: BoxConstraints(maxWidth: 400),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  SizedBox(width: 20,),
-                  Icon(Icons.person,color: Colors.blueAccent,size: 30,),
-                  SizedBox(width: 10,),
-                  Text(transactions["Name"],style: TextStyle(fontSize: 20,color: Colors.redAccent,fontWeight: FontWeight.w600),),
-                  SizedBox(width: 10,),
-                  Icon(Icons.attach_money_rounded,color: Colors.blueAccent,size: 30,),
-                  Text(transactions["Amount"],style: TextStyle(fontSize: 20,color: Colors.redAccent,fontWeight: FontWeight.w600),),
-                  SizedBox(width: 20,),
-                ],
-              ),
-              SizedBox(height: 10,),
-              Row(
-                children: [
-                  SizedBox(width: 20,),
-                  Icon(Icons.calendar_today,color: Colors.blueAccent,size: 30,),
-                  SizedBox(width: 10,),
-                  Text(transactions["Day"],style: TextStyle(fontSize: 20,color: Colors.redAccent,fontWeight: FontWeight.w600),),
-                  SizedBox(width: 10,),
-                  Icon(Icons.watch_later,color: Colors.blueAccent,size: 20,),
-                  SizedBox(width: 5,),
-                  Text(transactions["Time"],style: TextStyle(fontSize: 20,color: Colors.redAccent,fontWeight: FontWeight.w600),),
-                  SizedBox(width: 20,),
-                ],
-
-              ),
-              SizedBox(height: 10,),
-
-            ],
-          ),
-        ),
-      ),
-    );
   }
 
   Widget build(BuildContext context) {
@@ -101,15 +53,74 @@ class _historyState extends State<history> {
         centerTitle: true,
 
       ),
-      body: Container(
-        height: double.infinity,
-        child: FirebaseAnimatedList(query: ref ,itemBuilder: (BuildContext context,
-            DataSnapshot snapshot,Animation<double>animation,int index){
-          Map transactions = snapshot.value;
-          return buildcontactitems(transactions: transactions);
-        },),
-      ),
+      body: StreamBuilder(
+        stream: ref.onValue,
+        builder: (context, snap) {
 
-    );
+          if (snap.hasData && !snap.hasError && snap.data.snapshot.value != null) {
+
+            Map data = snap.data.snapshot.value;
+            List item = [];
+
+            data.forEach((index, data) => item.add({"key": index, ...data}));
+
+
+            return RawScrollbar(
+              isAlwaysShown: false,
+              thumbColor: Colors.redAccent,
+              radius: Radius.circular(20),
+              thickness: 5,
+              child: ListView.builder(
+                itemCount: item.length,
+                itemBuilder: (context,index) {
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(10,15,10,0),
+                    child: Card(
+                      elevation: 5,
+                      child: Container(
+                        height: 90,
+                        child: ListTile(
+                          leading: Padding(
+                            padding: const EdgeInsets.fromLTRB(0,8,0,0),
+                            child: CircleAvatar(
+                              radius: 20,
+                              child: Icon(Icons.person,size: 20,),
+                            ),
+                          ),
+                          title: Padding(
+                            padding: const EdgeInsets.fromLTRB(0,20,0,0),
+                            child: Text(item[index]["Name"],style: TextStyle(fontSize: 18,color: Colors.black),),
+                          ),
+                          subtitle: Padding(
+                            padding: const EdgeInsets.fromLTRB(0,5,0,0),
+                            child: Row(
+                              children: [
+                                Icon(Icons.date_range,size: 20,),
+                                Text(item[index]["Day"]),
+                                SizedBox(width: 10,),
+                                Icon(Icons.lock_clock,size: 20,),
+                                Text(item[index]["Time"]),
+
+                              ],
+                            ),
+                          ),
+                          trailing: Padding(
+                            padding: const EdgeInsets.fromLTRB(0,20,10,0),
+                            child: Text(item[index]["Amount"],style: TextStyle(fontSize: 19,color: Colors.black),),
+                          ),
+
+
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            );
+          }
+          else
+            return Text("");
+        },
+      ));
   }
 }
