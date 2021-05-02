@@ -1,10 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:thirty_days_flutter/Screen/Homepage.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:thirty_days_flutter/Screen/Login.dart';
-
 
 class splash extends StatefulWidget {
   @override
